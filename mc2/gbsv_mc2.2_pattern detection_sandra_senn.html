@@ -8099,8 +8099,8 @@ Blue-mask Canny edge density:  4.1%  -&gt;  n=56
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Evaluation-Approach-Definition">Evaluation Approach Definition<a class="anchor-link" href="#Evaluation-Approach-Definition">¶</a></h3><h4 id="Metric-Based-Evaluation">Metric-Based Evaluation<a class="anchor-link" href="#Metric-Based-Evaluation">¶</a></h4><p>The selected metric is the <strong>detected segment count</strong> $N_{\\text{lines}}$ [segments], which quantifies how many line segments the Probabilistic Hough Transform reports for each parameter configuration in relation to the automated crate-counting use case. It is specifically chosen because the problem statement requires understanding how Canny threshold $T_2$ and <code>minLineLength</code> influence detection sensitivity, and $N_{\\text{lines}}$ directly reflects changes in both over-detection (clutter inclusion) and under-detection (genuine grid-line suppression). The validity of this metric depends on the assumption that the expected number of structurally relevant grid lines (~15 horizontal frame edges) is known from visual inspection, which holds for the selected image at 1024 × 768 resolution.</p>
-<h4 id="Visualization-Based-Evaluation">Visualization-Based Evaluation<a class="anchor-link" href="#Visualization-Based-Evaluation">¶</a></h4><p>As a complementary visualization-based measure, the <strong>edge density</strong> $\\rho_{\\text{edge}}$ [% of ROI pixels] is reported for each configuration, representing the fraction of ROI pixels classified as edges by Canny and enabling direct comparison of pre-detection filter aggressiveness across configurations. This measure is directly relevant to the use case because excessive edge density indicates clutter inclusion that undermines reliable crate boundary isolation, while insufficient density signals suppression of genuine frame edges. The approach is appropriate under the assumption that edge density is monotonically influenced by $T_2$, which holds for standard gradient-based Canny edge detection.</p>
+<h3 id="Evaluation-Approach-Definition">Evaluation Approach Definition<a class="anchor-link" href="#Evaluation-Approach-Definition">¶</a></h3><h4 id="Metric-Based-Evaluation">Metric-Based Evaluation<a class="anchor-link" href="#Metric-Based-Evaluation">¶</a></h4><p>The selected metric is the <strong>detected segment count</strong> $N_{\\text{lines}}$ [segments], which quantifies the number of line segments reported by the Probabilistic Hough Transform for each parameter configuration in relation to the automated crate-counting use case. It is specifically chosen because the problem statement requires accurate assessment of how Canny threshold $T_2$ and <code>minLineLength</code> influence detection sensitivity, and $N_{\\text{lines}}$ directly reflects changes in both over-detection (clutter inclusion) and under-detection (genuine grid-line suppression). The validity of this metric depends on the assumption that the expected number of structurally relevant grid lines (~15 horizontal frame edges) is known from visual inspection, which holds for the selected image at 1024 × 768 resolution.</p>
+<h4 id="Visualization-Based-Evaluation">Visualization-Based Evaluation<a class="anchor-link" href="#Visualization-Based-Evaluation">¶</a></h4><p>The evaluation uses a <strong>bar chart</strong> visualization representing edge density $\\rho_{\\text{edge}}$ [% of ROI pixels] per configuration, with configuration labels on the x-axis and edge density on the y-axis in percent units, enabling direct visual comparison of Canny filter aggressiveness across all three configurations. The evaluated quantity is the fraction of ROI pixels classified as edges by Canny, which is directly relevant to the port logistics use case because excessive edge density indicates clutter inclusion that undermines reliable crate boundary isolation, while insufficient density signals suppression of genuine frame edges. This approach is appropriate under the assumption that edge density is monotonically influenced by $T_2$, which holds for standard gradient-based Canny edge detection and ensures that the extracted feature meaningfully reflects pre-detection filter sensitivity in this application context.</p>
 </div>
 </div>
 </div>
@@ -8111,19 +8111,7 @@ Blue-mask Canny edge density:  4.1%  -&gt;  n=56
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Evaluation-Comparison-Execution">Evaluation Comparison Execution<a class="anchor-link" href="#Evaluation-Comparison-Execution">¶</a></h3><p><span style="background-color: #eeeeee;"><em>Guidelines: Apply the defined evaluation approach consistently across all predefined experiments or configurations. Systematically vary 2–4 previously defined key parameters and quantify their influence on performance relative to a clearly specified baseline configuration. Results must be reported in a structured format (e.g., tables or measurable graphics) to ensure traceability. 2-4 sentences.</em></span></p>
-<h4 id="Template-%E2%80%93-Parameter-Evaluation-(Metric-Based)">Template – Parameter Evaluation (Metric-Based)<a class="anchor-link" href="#Template-%E2%80%93-Parameter-Evaluation-(Metric-Based)">¶</a></h4><blockquote>
-<p>The influence of key parameters __________ was evaluated using the previously defined metric __________.
-These parameters are essential for [the defined use case] because they directly affect ____________, which is critical for ____________.
-Changes in __________ [metric] across parameter settings quantify how sensitive the experiment design is to ____________.
-Relative performance change was computed with respect to the baseline configuration ____________.</p>
-</blockquote>
-<h4 id="Template-%E2%80%93-Parameter-Evaluation-(Visualization-Based)">Template – Parameter Evaluation (Visualization-Based)<a class="anchor-link" href="#Template-%E2%80%93-Parameter-Evaluation-(Visualization-Based)">¶</a></h4><blockquote>
-<p>The influence of key parameters __________ was evaluated using the previously defined visualization-based measure __________.
-These parameters are essential for the defined use case because they influence ____________, which determines ____________ in [the application context].
-Differences in the extracted quantity __________ across parameter settings quantify the impact of ____________ on performance.
-Relative performance change was computed with respect to the baseline configuration ____________.</p>
-</blockquote>
+<p>The influence of key parameters $T_2$ and <code>minLineLength</code> was evaluated using both the metric-based measure $N_{\\text{lines}}$ [segments] and the visualization-based measure $\\rho_{\\text{edge}}$ [% of ROI pixels]. These parameters are essential for the port logistics use case because they directly control the trade-off between clutter inclusion and genuine grid-line suppression, which is critical for reliable automated crate enumeration. Changes in $N_{\\text{lines}}$ and $\\rho_{\\text{edge}}$ across the three configurations quantify how sensitive the pipeline is to threshold and length constraints relative to the expected target of approximately 15 detected grid lines. Relative performance change was computed with respect to the Baseline configuration (T2=150, minL=57, $N_{\\text{lines}}=114$, $\\rho_{\\text{edge}}=11.13\\%$).</p>
 </div>
 </div>
 </div>
@@ -8223,67 +8211,45 @@ Configuration  T2  minL  N_lines  rel_change_N_pct  edge_density_pct  rel_change
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Example universal comparison table:</p>
 <table>
 <thead>
 <tr>
 <th style="text-align:left">Experiment / Configuration</th>
-<th style="text-align:left">Metric / Quantity 1</th>
-<th style="text-align:left">Metric / Quantity 2 (optional)</th>
-<th style="text-align:left">Relative Change to Baseline (%)</th>
+<th style="text-align:center">$T_2$ [intensity]</th>
+<th style="text-align:center"><code>minLineLength</code> [px]</th>
+<th style="text-align:center">$N_{\\text{lines}}$ [segments]</th>
+<th style="text-align:center">Rel. change $N_{\\text{lines}}$</th>
+<th style="text-align:center">$\\rho_{\\text{edge}}$ [% ROI px]</th>
+<th style="text-align:center">Rel. change $\\rho_{\\text{edge}}$</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left">Baseline: ____________</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">0%</td>
+<td style="text-align:left">Baseline: T2=150, minL=57</td>
+<td style="text-align:center">150</td>
+<td style="text-align:center">57</td>
+<td style="text-align:center">114</td>
+<td style="text-align:center">0%</td>
+<td style="text-align:center">11.13%</td>
+<td style="text-align:center">0%</td>
 </tr>
 <tr>
-<td style="text-align:left">Configuration 1: ____________</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
+<td style="text-align:left">Config 1: T2=90,  minL=30</td>
+<td style="text-align:center">90</td>
+<td style="text-align:center">30</td>
+<td style="text-align:center">848</td>
+<td style="text-align:center">+643.9%</td>
+<td style="text-align:center">14.22%</td>
+<td style="text-align:center">+27.8%</td>
 </tr>
 <tr>
-<td style="text-align:left">Configuration 2: ____________</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left">Configuration 3: ____________</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-</tbody>
-</table>
-<p>Example for Sampling Rate Variation:</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">Experiment / Configuration</th>
-<th style="text-align:left">RMSE</th>
-<th style="text-align:left">Relative Change to Baseline (%)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">Baseline: Fs = 100 Hz</td>
-<td style="text-align:left">0.12</td>
-<td style="text-align:left">0%</td>
-</tr>
-<tr>
-<td style="text-align:left">Fs = 50 Hz</td>
-<td style="text-align:left">0.18</td>
-<td style="text-align:left">+50%</td>
-</tr>
-<tr>
-<td style="text-align:left">Fs = 25 Hz</td>
-<td style="text-align:left">0.45</td>
-<td style="text-align:left">+275%</td>
+<td style="text-align:left">Config 2: T2=200, minL=80</td>
+<td style="text-align:center">200</td>
+<td style="text-align:center">80</td>
+<td style="text-align:center">42</td>
+<td style="text-align:center">−63.2%</td>
+<td style="text-align:center">8.43%</td>
+<td style="text-align:center">−24.3%</td>
 </tr>
 </tbody>
 </table>
@@ -8321,11 +8287,7 @@ Configuration  T2  minL  N_lines  rel_change_N_pct  edge_density_pct  rel_change
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h3 id="Observations-(3-5-sentences)">Observations (3-5 sentences)<a class="anchor-link" href="#Observations-(3-5-sentences)">¶</a></h3><p>Focus: Describe measurable results only — no explanation.</p>
-<blockquote>
-<p>The quantitative evaluation shows that ____________ changes from ____________ to ____________ across configurations ____________.
-The defined metric / extracted quantity indicates that ____________.
-Performance differences are most pronounced when ____________.</p>
-</blockquote>
+<p>The detected segment count $N_{\\text{lines}}$ changes from 42 (Config 2, T2=200, minL=80) to 848 (Config 1, T2=90, minL=30) across the three configurations, with the Baseline (T2=150, minL=57) yielding $N_{\\text{lines}} = 114$ segments. The edge density $\\rho_{\\text{edge}}$ follows the same monotonic ordering: 8.43% for Config 2, 11.13% for the Baseline, and 14.22% for Config 1, corresponding to relative changes of −24.3% and +27.8% with respect to the Baseline. None of the three configurations approaches the expected ~15 structurally relevant grid lines: even the most restrictive setting (Config 2) detects 42 segments, which is 2.8 times the expected target. Performance differences are most pronounced for Config 1, which produces a +643.9% increase in $N_{\\text{lines}}$ relative to the Baseline, while Config 2 yields a −63.2% reduction, indicating a strongly asymmetric sensitivity of $N_{\\text{lines}}$ to the parameter range tested.</p>
 </div>
 </div>
 </div>
@@ -8337,11 +8299,7 @@ Performance differences are most pronounced when ____________.</p>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h3 id="Interpretation-(3-5-sentences)">Interpretation (3-5 sentences)<a class="anchor-link" href="#Interpretation-(3-5-sentences)">¶</a></h3><p>Focus: Explain what the results mean for the application.</p>
-<blockquote>
-<p>In the context of ____________ [use case], these results imply that ____________.
-The observed variation in ____________ affects ____________ because ____________.
-This suggests that ____________ is particularly critical for achieving the objective defined in the problem statement.</p>
-</blockquote>
+<p>n the context of automated crate counting for Moroccan port logistics, these results imply that no classical Canny + Hough parameter configuration can reliably isolate the ~15 blue metal frame boundaries from the surrounding clutter of ropes, perforated crate mesh, and shadow edges. The observed variation in $N_{\\text{lines}}$ — ranging from 42 to 848 — affects crate count accuracy because every spurious segment detected from rope or mesh texture contributes directly to overcounting, while every suppressed frame edge leads to undercounting; at +643.9% for Config 1, the pipeline becomes entirely unreliable for operational use. The persistent overdetection even at the most restrictive setting (Config 2: $N_{\\text{lines}} = 42 \\gg 15$) combined with a comparatively modest edge density reduction (−24.3%) suggests that the gradient magnitudes of perforated mesh edges and blue frame boundaries overlap significantly in the grayscale domain, making threshold-based separation structurally infeasible. This indicates that $T_2$ and <code>minLineLength</code> are the most critical parameters for controlling detection volume, yet neither is sufficient alone to achieve the selectivity required for reliable crate enumeration in this port logistics application.</p>
 </div>
 </div>
 </div>
@@ -8353,13 +8311,7 @@ This suggests that ____________ is particularly critical for achieving the objec
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h3 id="Discussion-and-Critical-Reflection-(4%E2%80%936-sentences)">Discussion and Critical Reflection (4–6 sentences)<a class="anchor-link" href="#Discussion-and-Critical-Reflection-(4%E2%80%936-sentences)">¶</a></h3><p><em>Focus: Relate the quantitative findings to the requirements of the defined use case and assess practical adequacy.</em></p>
-<blockquote>
-<p>For the defined use case, the configurations ____________ performed well because they achieved ____________, which aligns with the requirement of ____________.
-In contrast, configurations ____________ showed reduced performance, leading to ____________ and limiting their suitability for this application.
-The achieved performance level can be considered sufficient / insufficient for the use case because ____________.
-The implementation and evaluation approach assumes ____________, which may be constrained under real-world conditions such as ____________.
-To improve robustness or applicability, future work should address ____________ or refine ____________.</p>
-</blockquote>
+<p>For the defined use case, Config 2 (T2=200, minL=80) performed relatively best among the three configurations because it achieved the lowest $N_{\\text{lines}}$ (42) and the lowest edge density (8.43%), which most closely aligns with the requirement of suppressing clutter while retaining genuine frame edges — yet even this configuration overestimates the expected count by a factor of 2.8. In contrast, Config 1 (T2=90, minL=30) showed severely reduced selectivity, producing $N_{\\text{lines}} = 848$ and $\\rho_{\\text{edge}} = 14.22\\%$, and would lead to catastrophic overcounting in the port logistics workflow, rendering it entirely unsuitable for operational deployment. The achieved detection performance must be considered insufficient for the use case because a reliable automated crate count requires $N_{\\text{lines}}$ to be interpretable as a direct crate proxy, which is not the case when the detected count deviates by a factor of 2.8 to 56.5 from the expected grid line count across all configurations. The implementation and evaluation approach assumes that blue metal frame edges produce gradient magnitudes clearly separable from those of ropes and perforated crate mesh in the grayscale domain, which is violated in the selected image due to the colouration and perforation of the crate baskets generating comparable gradient responses at all tested threshold levels. To improve robustness and applicability, future work should address colour-domain separation of blue frame boundaries from multicoloured mesh surfaces — for example via HSV-based masking as explored in the ablation study — or refine the detection pipeline by incorporating a learned edge classifier capable of distinguishing structural frame edges from texture edges using contextual and colour features.</p>
 </div>
 </div>
 </div>
